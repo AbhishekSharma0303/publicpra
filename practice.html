@@ -1,0 +1,2311 @@
+{% load static %}
+{% load custom_templates %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name=" csrf-token " content="iL8hUXsdXy71MbOZjq4fWUv4KGPZnJ7k17P7RClL "> -->
+    <title>CT:Lanforge WebUI</title>
+    <!-- <meta name="description " content="Oero Laravel ">
+    <meta name="author " content="Oero Laravel "> -->
+
+
+    <link rel="stylesheet " href="{% static 'resources\assets\plugins\bootstrap\css\bootstrap.min.css' %} ">
+    <link rel="stylesheet " href="{% static 'resources\assets\plugins\jvectormap\jquery-jvectormap-2.0.3.min.css' %} ">
+    <link rel="stylesheet " href="{% static 'resources\assets\plugins\morrisjs\morris.min.css' %} ">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'resources\assets\css\cdnmin.css' %}">
+    <!-- Custom Css -->
+    <link rel="stylesheet " href="{% static 'resources\assets\css\mysty1.css' %} ">
+    <link rel="stylesheet " href="{% static 'resources\assets\css\color_skins.css' %} ">
+
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {},
+            Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = "{% static 'resources\assets\js\pages\tawk.js' %}";
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <style>
+        body {
+            min-width: 150px;
+            zoom: normal;
+        }
+
+        #wrapper {
+            margin-left: auto;
+            margin-right: auto;
+            width: 961px;
+        }
+
+        .wifi-symbol {
+            display: none;
+        }
+
+        .wifi-symbol [foo],
+        .wifi-symbol {
+            display: block;
+            position: relative;
+            margin: 0 auto 0;
+            top: -30px;
+            width: 150px;
+            height: 150px;
+            -ms-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .wifi-symbol .wifi-circle {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            display: block;
+            width: 100%;
+            height: 100%;
+            font-size: 21.4285714286px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-color: #FFFFCC;
+            border-style: solid;
+            border-width: 1em 1em 0 0;
+            -webkit-border-radius: 0 100% 0 0;
+            border-radius: 0 100% 0 0;
+            opacity: 0;
+            -o-animation: wifianimation 1s infinite;
+            -moz-animation: wifianimation 1s infinite;
+            -webkit-animation: wifianimation 1s infinite;
+            animation: wifianimation 1s infinite;
+        }
+
+        .wifi-symbol .wifi-circle.first {
+            -o-animation-delay: 600ms;
+            -moz-animation-delay: 600ms;
+            -webkit-animation-delay: 600ms;
+            animation-delay: 600ms;
+        }
+
+        .wifi-symbol .wifi-circle.second {
+            width: 5em;
+            height: 5em;
+            -o-animation-delay: 400ms;
+            -moz-animation-delay: 400ms;
+            -webkit-animation-delay: 400ms;
+            animation-delay: 400ms;
+        }
+
+        .wifi-symbol .wifi-circle.third {
+            width: 3em;
+            height: 3em;
+        }
+
+        .wifi-symbol .wifi-circle.fourth {
+            width: 1em;
+            height: 1em;
+            opacity: 1;
+            background-color: #FFFFCC;
+            -o-animation: none;
+            -moz-animation: none;
+            -webkit-animation: none;
+            animation: none;
+        }
+
+        @keyframes wifianimation {
+            0% {
+                opacity: 0.4;
+            }
+
+            5% {
+                opactiy: 1;
+            }
+
+            6% {
+                opactiy: 0.1;
+            }
+
+            100% {
+                opactiy: 0.1;
+            }
+        }
+
+        @keyframes fadein {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes rotation {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(359deg);
+            }
+        }
+
+        #toggle_available:active,
+        #manual_test:active,
+        #automation_test:active {
+            transform: scale(0.95);
+        }
+
+        #select_auto:hover,
+        #select_auto:active,
+        #close_auto:hover {
+            animation: rotation 2s infinite linear;
+        }
+
+        /* ---------- */
+
+        .fab {
+            position: absolute;
+            bottom: 37px;
+            left: 24px;
+            border-radius: 23%;
+            width: 100px;
+            height: 60px;
+            /* box-shadow: 0px 9px 12px grey; */
+            z-index: 3;
+            color: white;
+
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-basis: 200px;
+
+        }
+
+        .box {
+            position: absolute;
+            bottom: 30px;
+            left: 116px;
+            /* right: 50px; */
+            display: none;
+            height: 7vh;
+
+            width: 100px !important;
+            color: white;
+
+
+            border-radius: 23%;
+            transition: width 3s;
+            transition-delay: 1s;
+            flex-basis: 200px;
+
+        }
+
+        .box-active {
+            display: flex;
+        }
+
+        .item {
+
+            /* border-radius: 29%; */
+            transition: 0.2s ease-in-out;
+            width: 170px;
+            height: 44px;
+            padding: 5px 5x 5px 5px;
+            margin: 50px;
+            color: white;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 9px 9px grey;
+            flex-basis: 200px;
+        }
+
+        .fab:hover {
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        /* checkbox-rect */
+        .checkbox-rect input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-rect input[type="checkbox"]+label {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 30px;
+            font: 1rem "Open Sans", Arial, sans-serif;
+            cursor: pointer;
+            --webkit-user-select: none;
+            --moz-user-select: none;
+            --ms-user-select: none;
+        }
+
+        .checkbox-rect input[type="checkbox"]:hover+label:hover {
+            color: rgb(23, 86, 228);
+        }
+
+        .checkbox-rect input[type="checkbox"]:hover+label:before {
+            background: #a7a7a7;
+            box-shadow: inset 0px 0px 0px 2px #f7f2f2;
+        }
+
+        .checkbox-rect input[type="checkbox"]+label:last-child {
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-rect input[type="checkbox"]+label:before {
+            content: "";
+            display: block;
+            width: 1.4em;
+            height: 1.4em;
+            border: 1px solid #343a3f;
+            border-radius: 0.2em;
+            position: absolute;
+            left: 0;
+            top: 0;
+            -webkit-transition: all 0.2s, 0.2s ease-in-out;
+            transition: all 0.2s, 0.2s ease-in-out;
+            background: #f3f3f3;
+        }
+
+        .checkbox-rect input[type="checkbox"]:checked+label:before {
+            width: 1.3em;
+            height: 1.3em;
+            border-radius: 0.2em;
+            border: 2px solid #fff;
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+            background: #50565a;
+            box-shadow: 0 0 0 1px #000;
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        #context-menu,
+        #context-menu-inner {
+            position: fixed;
+            z-index: 10000;
+            width: 270px;
+            background: #673d3d;
+            border-radius: 5px;
+            transform: scale(0);
+            transform-origin: top left;
+        }
+
+        #context-menu.visible,
+        #context-menu-inner.visible {
+            transform: scale(1);
+            transition: transform 200ms ease-in-out;
+        }
+
+        #context-menu .item,
+        #context-menu-inner .item {
+            padding: 8px 10px;
+            font-size: 15px;
+            color: #eee;
+            cursor: pointer;
+            border-radius: inherit;
+        }
+
+        #context-menu .item:hover,
+        #context-menu-inner .item:hover {
+            background: #343434;
+        }
+
+        /* checkbox-rect end */
+        /* ------------- */
+        /* CSS - Advance Testing */
+    </style>
+
+
+</head>
+
+<body style="border-color: gray; background-color: white;" style="font-family: 'Open Sans Light'; overflow-y: auto;">
+    <script>
+        document.getElementsByTagName('body')[0].classList.toggle("ls-toggle-menu");
+    </script>
+    <div class="modal fade" id="connect_modal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg-auto">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="font-family: sans-serif; background-color: rgb(60,75,100); color: white; padding: 0%;">
+                    <button type="button" style="padding: 0%;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 style="height: 40px; padding-top: 10px; padding-left: 10px; font-size: 15px; font-weight: bold;"
+                        class="modal-title">Connect to a Network</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="ssid" placeholder="SSID">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="encryption" placeholder="Encryption">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="click" id="connect_wifi" style="background-color: rgb(60,75,100);"
+                        class="btn btn-primary" data-dismiss="modal" class="btn btn-success">Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="configure_modal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg-auto">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="font-family: sans-serif; background-color: rgb(60,75,100); color: white; padding: 0%;">
+                    <button type="button" style="padding: 0%;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 style="height: 40px; padding-top: 10px; padding-left: 10px; font-size: 15px; font-weight: bold;"
+                        class="modal-title">Configure Network</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="mgr_ip" placeholder="Manager IP">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="ssid" placeholder="SSID">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="encryption" placeholder="Encryption">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="click" id="configure_wifi" style="background-color: rgb(60,75,100);"
+                        class="btn btn-primary" data-dismiss="modal" class="btn btn-success">Configure</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page Loader -->
+    <div style="background-color:#303c54;" class="page-loader-wrapper">
+        <div style="background-color:#303c54;" class="loader">
+            <div style="background-color:#303c54;" class="m-t-30">
+                <div class="wifi-symbol">
+                    <div class="wifi-circle first"></div>
+                    <div class="wifi-circle second"></div>
+                    <div class="wifi-circle third"></div>
+                    <div class="wifi-circle fourth">
+                    </div>
+                </div>
+            </div>
+            <p style="background-color:#303c54;">Please wait...</p>
+        </div>
+    </div>
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <div id="wrapper">
+        <nav class="navbar p-l-5 p-r-5" style="background-color: #303c54; max-height: 60px;">
+            <ul class="nav navbar-nav navbar-left" style="background-color: #303c54; max-height: 60px;">
+                <li>
+                    <div class="navbar-header">
+                        <!-- <a href="javascript:void(0);" class="bars"></a> -->
+                        <!-- <a class="navbar-brand"><img src="{% static 'resources\assets\images\candela.png' %}" width="30" alt="Oreo"><span class="m-l-10">Candela Technologies</span></a> -->
+                    </div>
+                </li>
+                <!-- <li><a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-settings"
+                            title="Back"></i></a></li>
+ -->
+
+                <li class="d-none d-md-inline-block">
+                <li>
+                    <a href="#" class="ls-toggle-btn"><i class="zmdi zmdi-menu"></i></a>
+                </li>
+                <!-- <li class="active open">
+                    <a href="{% url 'home' %}"></i><b><span style="font-weight:bolder">Dashboard</span></b></a>
+                </li>
+                <li class="active open">
+                    <a href="{% url 'statistics' %}"></i><b><span style="font-weight:bolder">Statistics</span></b></a>
+                </li> -->
+                <!-- <li style="margin-left: 30%; padding-top: 1vh;">
+                    <form class="form-inline" method="post" action="" style="display:flex;flex-direction:row;justify-content: center;column-gap: 1rem;">
+                    {% csrf_token %}
+                        <div id="search">
+                            <input id="search_ip" type="text" placeholder="Enter LANforge IP">
+                            <input type="button" style="margin: 0%; background-color: white; color: #3c4b64; font-weight: bolder;"
+                                class="btn btn-primary btn-round" id="connect" value="Add Run">
+                        </div>
+                    </form>
+                </li> -->
+                <li class="float-right">
+                    <p style="color: white;"><b>Active User : </b>{{tester_email_id.name}}</p>
+
+                    <a href="{% url 'logout' %}" class="mega-menu" data-close="true"><i class="zmdi zmdi-long-arrow-tab"
+                            title="Logout"></i></a>
+                    <!-- <a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="zmdi zmdi-settings"
+                            title="Settings"></i></a> -->
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- Left Sidebar --><br>
+    <aside id="leftsidebar" class="sidebar">
+        <ul style="background-color:white" class="nav nav-tabs">
+            <li class="nav-item" style="text-align: center;margin:0 auto 0;width:100%;">
+                <a style="color: white;" class="nav-link active" data-toggle="tab" href="#dashboard">
+
+                    <link rel="icon" href="{% static 'resources\assets\images\gold1.svg' %}" type="icon"><img
+                        src="{% static 'resources\assets\images\gold1.svg' %}" /></i><strong
+                        style="font-size: x-small; color: green;">Candela Technologies</strong>
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane stretchRight active" id="dashboard">
+                <div class="menu">
+                    <ul style="background-color:rgb(60,75,100);margin: 0 0px;" class="list">
+                        <li class="">
+                            <a href="{% url 'interop_ui_1' %}"
+                                style="padding-bottom: 10px; height:50.5px; width: 100%; background-color: #5985de;">
+                                <i style="color: white;" class="zmdi zmdi-account-add"></i>
+                                <b><span style="color: white;">Manual Testing</span></b>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="" style="padding-bottom: 20px; padding-top: 12px;">
+                                <i style="color: white;" class="zmdi zmdi-account-add"></i>
+                                <b><span style="color: white;">Automation Testing</span></b>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="" style="padding-bottom: 20px; padding-top: 12px;">
+                                <i style="color: white;" class="zmdi zmdi-account-add"></i>
+                                <b><span style="color: white;">Advance Testing</span></b>
+                            </a>
+                        </li>
+                        <!-- <li class="">
+                            <a style="padding-bottom: 20px; padding-top: 12px;">
+                                <i style="color: white;" class="zmdi zmdi-account-add"></i>
+                                <b><span style="color: white;">Results</span></b>
+                            </a>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </aside>
+    <style>
+        /*
+    .zoom:hover {
+        transform: scale(1.2);
+        /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)} */
+
+        #example1 {
+            border: 1px solid;
+            box-shadow: 5px 5px 10px #3d3d3d;
+        }
+
+        /* .card {
+        box-shadow: 5px -5px 10px #3d3d3d;
+    }
+
+    .card:hover {
+        box-shadow: none;
+    }*/
+
+        h6 {
+            padding: 10px;
+        }
+
+        #head {
+            background-color: #3c4b64;
+            width: auto;
+            margin: auto;
+            padding: auto;
+            overflow: auto;
+        }
+
+        div[title] {
+            font-weight: bold;
+            color: rgb(231, 214, 139);
+        }
+    </style>
+    <section class="content home">
+        <!-- <div class="outer " id="example1">
+            <div class="header" id="head">
+                <h6 style="color: white;text-transform: capitalize; font-weight: bolder;"><b>LANforge Interop</b></h6>
+            </div><br>
+            <form class="form-inline" method="post" action=""
+                style="display:flex;flex-direction:row;justify-content: center;column-gap: 1rem;">
+                {% csrf_token %}
+                <div id="search">
+                    <input id="search_ip" type="text" placeholder="Enter LANforge IP">
+                    <input type="button" style="margin: 0%; background-color: rgb(60,75,100);"
+                        class="btn btn-primary btn-round" id="connect" value="Add Run">
+                </div>
+            </form>
+        </div><br> -->
+        <div class="container-fluid">
+            <div class="row" style="height: 85%;">
+                <div class="outer col-sm-auto" style="padding: 0%; width: 3vw; padding-left: 0.5vw; height: 90%;">
+                    <div class="row" style="height: 9%;">
+                        <div style=" padding: 5px;height: 0;">
+                            <div id="toggle_available" onclick="toggle_available(this);" title="Show Available Devices"
+                                style="border-radius: 50%; background-color: rgb(60,75,100);  width: 50px; height: 50px; padding: 10px 15px 10px 17px; box-shadow: 0 0 6px #3d3d3d;">
+                                <i id="close" class="zmdi zmdi-smartphone zmdi-hc-2x"
+                                    style="color: cyan; display: none;"></i>
+                                <i id="mobile" class="zmdi zmdi-smartphone zmdi-hc-2x"
+                                    style="color: white; display: block;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 9%;">
+                        <div style=" padding: 5px;height: 0;">
+                            <div id="manual_test" onclick="toggle_manual(this);" title="Show Manual Testing"
+                                style="border-radius: 50%; background-color: rgb(60,75,100);  width: 50px; height: 50px; padding: 10px 15px 10px 17px; box-shadow: 0 0 6px #3d3d3d;">
+                                <i id="close_manual" style="display: block;">
+                                    <img src="{% static 'resources\assets\images\manual_testing_active.svg' %}"
+                                        style="padding-top: 25%;" alt="Manual Testing Icon">
+                                </i>
+                                <i id="select_manual" style="display: none;">
+                                    <img src="{% static 'resources\assets\images\manual_testing.svg' %}"
+                                        style="padding-top: 25%;" alt="Manual Testing Icon">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 0%;">
+                        <div style=" padding: 5px;height: 0;">
+                            <div id="automation_test" onclick="toggle_auto(this);" title="Show Automation Testing"
+                                style="border-radius: 50%; background-color: rgb(60,75,100);  width: 50px; height: 50px; padding: 10px 15px 10px 17px; box-shadow: 0 0 6px #3d3d3d;">
+                                <i id="close_auto" class="zmdi zmdi-settings zmdi-hc-2x"
+                                    style="color: cyan; margin: -20%; margin-top: 2%; display: none;"></i>
+                                <i id="select_auto" class="zmdi zmdi-settings zmdi-hc-2x"
+                                    style="color: white; margin: -20%; margin-top: 2%;"></i>
+                            </div>
+                            <div class="row" style="height: 15%;">
+                                <div style=" padding: 15px;height: 0;">
+                                    <div class="advance_test_icon" id="advance_test" onclick="toggle_advance(this);"
+                                        title="show Advanced Testing"
+                                        style="border-radius: 50%; background-color: rgb(60,75,100);  width: 50px; height: 50px;left:10px; padding: 10px 15px 10px 17px; box-shadow: 0 0 6px #3d3d3d;">
+                                        <i id="close_adv" class="zmdi zmdi-tune zmdi-hc-2x"
+                                            style="color: cyan; margin: -20%; margin-top: 2%; display: none;"></i>
+                                        <i id="select_adv" class="zmdi zmdi-tune zmdi-hc-2x"
+                                            style="color: white; margin: -20%; margin-top: 2%;"></i>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="outer col-sm-2 available" id="example1"
+                    style="padding: 0%; border-radius: 1rem 1rem 0 0; display: none;">
+                    <div class="header" id="head" style="border-radius: 1rem 1rem 0 0; padding: 0%;">
+                        <h6 style="color: white; text-transform: capitalize; font-weight: bolder; width: auto;">
+                            <b>Available Devices</b>
+                        </h6>
+                    </div><br>
+                    <div style="overflow-y: auto;height: 90%;">
+                        <div id="available_devices" style=" padding: 5px;height: 0;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-mg-auto" style="width: 1vw;">
+                </div>
+                <div class="outer col-sm manual_test" id="example1" style="padding: 0%; border-radius: 1rem 1rem 0 0;">
+                    <div class="header" id="head" style="border-radius: 1rem 1rem 0 0; padding: 0%;">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <h6 style="color: white; text-transform: capitalize; font-weight: bolder; width: auto;">
+                                    <b>Manual Testing</b>
+                                </h6>
+                            </li>
+                            <li style="margin-left: 30%; padding-top: 1vh;">
+                                <form class="form-inline" method="post" action=""
+                                    style="display:flex;flex-direction:row;justify-content: center;column-gap: 1rem;">
+                                    {% csrf_token %}
+                                    <div id="search">
+                                        <input id="search_ip" type="text" placeholder="Enter LANforge IP">
+                                        <input type="button"
+                                            style="margin: 0%; background-color:white; color: #3c4b64; font-weight: bolder;padding: 8px 9px;"
+                                            class="btn btn-primary btn-round" class="connect" id="connect"
+                                            value="Add Run">
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="display: flex; flex-direction: row; margin-top: 1rem;">
+                        <div class="col-sm-auto"
+                            style="width: 50%; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div class="row" style="margin: 10px; flex: 1 1 0;">
+                                <section class="col-sm" style="padding: 0%; border: 1px solid black;">
+                                    <div class="header" id="head" style="padding: 0%;">
+                                        <h6
+                                            style="color: white; text-transform: capitalize; font-weight: bolder; width: auto;">
+                                            <b>Select Device</b>
+                                        </h6>
+                                    </div>
+                                    <div style="overflow-y: hidden; padding: 15px; height: 25vh;">
+                                        <div id="non_phantom_devices" style="overflow-y: auto; height: 90%">
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="row" style="margin: 10px;">
+                                <!-- <section class="col-sm-6" style="padding: 0%;">
+                                    <div class="container-fluid" style="padding: 15px; width: fit-content;">
+                                        <div class="row" style="height: 4vh;">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" id="enable_wifi" value="Enable Wi-Fi">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" id="disable_wifi" value="Disable Wi-Fi">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" id="forge_network" value="Forget All N/W">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="height: 5vh;">
+                                        </div>
+                                        <div class="row" style="display: inline-flex; width: max-content;">
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh; visibility: hidden;"
+                                                    class="btn btn-primary">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button" style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;" class="btn btn-primary" value="Reboot Devices">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button" style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;" class="btn btn-primary" value="Launch Youtube">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button" style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;" class="btn btn-primary" value="URL">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="height: 15vh;">
+                                        </div>
+                                        <div class="row" style="display: inline-flex; width: max-content;">
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" value="Connect To N/W" data-target="#connect_modal" data-toggle="modal">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" id="start_app" value="Start App">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" id="stop_app" value="Stop App">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="height: 5vh;">
+                                        </div>
+                                        <div class="row" style="display: inline-flex; width: max-content;">
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh; visibility: hidden;"
+                                                    class="btn btn-primary">
+                                            </div>
+                                            <div class="col">
+                                                <input type="button"
+                                                    style="margin: 0%; background-color: rgb(60,75,100); width: 7vw; height: 7vh;"
+                                                    class="btn btn-primary" value="Configure N/W" data-target="#configure_modal" data-toggle="modal">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fab" id="fab_icon" title="tool"
+                        style="border-radius: 50%; background-color: rgb(60,75,100);  width: 50px; height: 50px; padding: 10px 15px 10px 17px; box-shadow: 0 0 6px #3d3d3d;">
+                        <i id="tool" class="zmdi zmdi-wrench zmdi-hc-2x"
+                            style="color: white; margin: -20%; margin-top: 2%;"></i>
+                    </div>
+
+
+                    <div class="btn-group box" id="boxx" style="width:100%">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " id="enable_wifi" value="Enable Wi-Fi">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " id="disable_wifi" value="Disable Wi-Fi">
+
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " id="forge_network" value="Forget All N/W">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " id="reboot devices" value="Reboot Devices">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7.5vw; height: 6vh;margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " value="Connect To N/W" data-target="#connect_modal"
+                            data-toggle="modal">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item " id="start_app" value="Start App">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item  " id="stop_app" value="Stop App">
+                        <input type="button"
+                            style="margin: 0%; background-color: rgb(60,75,100); width:7vw; height: 6vh; margin:4px;border-radius: 8px;"
+                            class="btn btn-primary item" value="Configure N/W" data-target="#configure_modal"
+                            data-toggle="modal">
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-mg-auto" style="width: 1vw;">
+                </div>
+                <div class="content home col-sm automation_test"
+                    style="padding-bottom: 0px;width: auto; display: none;">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {{ ssids|json_script:"ssids" }}
+                    <script>
+                        const ssids = JSON.parse(document.getElementById('ssids').textContent);
+                        var ssid_values = JSON.parse(ssids);
+                    </script>
+                    <div class="content-center" style="width: 100%; padding-bottom: 20px;">
+                        <div class="card"
+                            style="background-color:white; box-shadow: 5px 5px 10px black; padding: 0px; ">
+                            <ul class="nav navbar-nav navbar-left" style="background-color:#3c4b64; max-height: 50px;">
+                                <li>
+                                    <h2
+                                        style="color: white; font-family: sans-serif; background-color: rgb(60,75,100); height: 40px; padding-top: 10px; font-size: 15px; font-weight: bold;">
+                                        &nbsp; Automation Testing
+                                    </h2>
+                                </li>
+                                <li style="margin-left: 30%; padding-top: 1vh;">
+                                    <form class="form-inline" method="post" action=""
+                                        style="display:flex;flex-direction:row;justify-content: center;column-gap: 1rem;">
+                                        {% csrf_token %}
+                                        <div id="search">
+                                            <input id="search_ip" type="text" placeholder="Enter LANforge IP">
+                                            <input type="button"
+                                                style="margin: 0%; background-color:white; color: #3c4b64; font-weight: bolder;padding: 8px 9px;"
+                                                class="btn btn-primary btn-round" class="connect" id="connect"
+                                                value="Add Run">
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+
+
+                            <form name=forme class="form-inline" method="post" id="forme">
+                                {% csrf_token %}
+                                <div class="form-row" id="myform" style="margin: auto; white-space: nowrap;">
+                                    <div class="col-mg-auto" style="margin: 3px; display: inline-block; float: none;">
+                                        <select id="feature" onchange="change_form(this);">
+                                            <option value="" selected disabled>Feature</option>
+                                            {% for feature in features %}
+                                            <option value="{{ feature.feature_label }}">{{ feature.feature_name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test dataplane scan_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <select id="dut_model" onchange="ssids_values()">
+                                            <option value="" disabled selected>DUT Model</option>
+                                            {% for dut in device_under_test %}
+                                            <option value="{{dut.dut_model}}">{{dut.dut_model}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  scan_test"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <select id="ssid_test">
+                                            <option value="" disabled selected>SSID</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <select id="ssid_twog">
+                                            <option value="" disabled selected>2G SSID</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <select id="ssid_fiveg">
+                                            <option value="" disabled selected>5G SSID</option>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="col-mg-auto auto_form wifi_capacity_test scan_test" style="margin: 3px; display: inline-block; float: none;">
+                                        <input class="btn-round" style="margin: 0%; padding: 5 10 11 5;" type="number" id="port" title="Port" min="1" max="65535" value="8080" placeholder="Port"  >
+                                    </div> -->
+                                    <div class="col-mg-auto auto_form scan_test"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <select id="security">
+                                            <option value="" disabled selected>Security</option>
+                                            {% for i in security %}
+                                            <option value="{{i}}">{{i}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <input class="btn-round" style="margin: 0%; padding: 5 10 11 5;" type="number"
+                                            id="batch_size" title="Batch Size" min="1" placeholder="Batch Size">
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <input class="btn-round" style="margin: 0%; padding: 5 10 11 5;" type="number"
+                                            id="duration" title="Duration(sec)" min="1" placeholder="Duration(sec)">
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <select id="protocol">
+                                            <option value="" selected disabled>Protocol</option>
+                                            <option value="TCP-IPv4">TCP IPv4</option>
+                                            <option value="UDP-IPv4">UDP IPv4</option>
+                                            <option value="Layer 4-7">Layer 4-7</option>
+                                            <option value="TCP and UDP IPv4">TCP and UDP IPv4</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <input class="btn-round" style="margin: 0%; padding: 5 10 11 5;"
+                                            placeholder="Download Rate(Mbps)" type="number" id="download_rate"
+                                            title="Download Rate(Mbps)" min="0">
+                                    </div>
+                                    <div class="col-mg-auto auto_form  wifi_capacity_test"
+                                        style="margin: 3px; display: inline-block; float: none;">
+                                        <input class="btn-round" style="margin: 0%; padding: 5 10 11 5;"
+                                            placeholder="Upload Rate(Mbps)" type="number" id="upload_rate"
+                                            title="Upload Rate(Mbps)" min="0">
+                                    </div>
+                                    <div class="col-mg-auto" style="margin: 3px; display: inline-block; float: none;">
+                                        <input type="text" id="starttime" class="btn-round" placeholder="Schedule"
+                                            style="margin: 0%; padding: 5 0 11 5;"
+                                            onfocus="this.type='datetime-local'; this.min=new Date().toISOString().slice(0,16)"
+                                            name="starttime" style="width: auto;">
+                                    </div>
+                                    <!-- <div class="col-mg-auto auto_form dataplane" style="margin: 3px; display: inline-block; float: none;">
+
+                                    </div> -->
+                                    <!-- Template on the above DO NOT REMOVE IT -->
+                                    <div class="col-mg-auto auto_form dataplane"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <input type="text">
+                                    </div>
+                                    <div class="col-mg-auto auto_form dataplane"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <input type="text">
+                                    </div>
+                                    <div class="col-mg-auto auto_form dataplane"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <input type="text">
+                                    </div>
+                                    <div class="col-mg-auto auto_form dataplane"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <input type="text">
+                                    </div>
+                                    <div class="col-mg-auto auto_form dataplane"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <input type="text">
+                                    </div>
+                                    <div class="col-mg-auto auto_form scan_test"
+                                        style="margin: 3px; display: inline-block; float: none; display: none;">
+                                        <div class="form-group" style="position: relative; left: -15%;">
+                                            <label for="radio"
+                                                style="position: relative; left: 20%; bottom: 3px; width: max-content;">wiphy</label>
+                                            <input class="btn-round"
+                                                style="margin: 0%; padding: 5 10 11 5; text-indent: 25%;" type="number"
+                                                id="radio" title="Radio" min="0" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-mg-auto" style="margin: 3px; display: inline-block; float: none;">
+                                        <input type="button" style="margin-left: 5px; background-color: rgb(60,75,100)"
+                                            class="btn btn-primary" id="btnsave" value="Add Run">
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                    {{ mydata|json_script:"mydata" }}
+                    <input id="sync_var" type="hidden" value="{{ sync_var }}">
+                    <script>
+                        const mydata = JSON.parse(document.getElementById('mydata').textContent);
+                        var data = JSON.parse(mydata);
+                    </script>
+                    <div class="card " style="margin: 0%; box-shadow: 5px 5px 10px black; font-family: sans-serif;">
+                        <div class="header" style="background-color: white; padding: 0%;">
+                            <h2
+                                style="font-family: sans-serif; background-color: rgb(60,75,100); height: 40px; padding-top: 10px;">
+                                <strong style="color: white;">&nbsp; Scheduler</strong>
+                            </h2>
+                            <div class="body" style="padding-left: 0%; background-color: white;">
+                                <input type="text" style="display: none;" id="myInput1" onkeyup="functionn()"
+                                    placeholder="Search .." title="Type in a name">
+                                <div class="table-responsive"
+                                    style="max-height: 45vh; margin-left: 5px; margin-right: 5px;">
+                                    <table id="myTable" style="width: 100%; justify-content: center; "
+                                        class="table table-bordered js-basic-example dataTable ">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th style="border: none; "></th>
+                                                <th style="border: none;"></th> -->
+                                                <th>Status</th>
+                                                <!-- <th style="border: box 20px; padding-right: 8.2rem;">Results</th> -->
+                                                <th>Time</th>
+                                                <th>Feature</th>
+                                                <!-- <th>Batch Size</th> -->
+                                                <!-- <th>Duration</th> -->
+                                                <!-- <th>Upload Rate</th> -->
+                                                <!-- <th>Download Rate</th> -->
+                                                <!-- <th>Protocol</th> -->
+                                                <!-- <th>Tester name</th> -->
+                                                <!-- <th>Tester ID</th> -->
+                                                <!-- <th>Notes</th>
+                                                <th>Noted By</th> -->
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                            {% for i in testscheduler_all reversed%}
+                                            <tr>
+                                                <!-- {% if i.status == 'Cancelled' or i.status == 'Completed' or i.status == 'Pending' %}
+            
+                                                    {% if i.tester_name == tester_email_id.name %}
+                                                    <td title="Delete" style="border: none; background: none; padding-right: 0%; min-width: max-content;">
+                                                        <a href="#" onclick="deletefunction(this,'{{i.tester}}','{{i.starttime}}','{{i.celery_task_id}}');" id="delete" style="margin-top: 0px; border: none; padding: 0%; cursor: pointer; box-shadow: none;"><i
+                                                                    class="zmdi zmdi-delete" style="color: red; font-size: 25px;"></i> </a>
+                                                    </td>
+                                                    <td title='Cancel' style='border: none; background: none; padding-right: 5px; min-width: max-content;'>
+                                                        <a href='#' class='btn-cncl' id='cancel' style='margin-top: 0px; border: none; padding: 0%; pointer-events: none;' data-sid=" + x[i].starttime + ">
+                                                            <i class='zmdi zmdi-close' style='color: #cccccc; font-size: 25px;'></i>
+                                                        </a>
+                                                    </td>
+                                                    {% else %}
+                                                    <td title="Delete" style="border: none; background: none; padding-right: 0%; min-width: max-content;">
+                                                        <a href="#" onclick="deletefunction(this,'{{i.tester}}','{{i.starttime}}','{{i.celery_task_id}}');" id="delete" style="margin-top: 0px; border: none; padding: 0%; box-shadow: none; pointer-events: none;"><i
+                                                                    class="zmdi zmdi-delete" style="color: #cccccc; font-size: 25px;"></i> </a>
+                                                    </td>
+                                                    <td title='Cancel' style='border: none; background: none; padding-right: 5px; min-width: max-content;'>
+                                                        <a href='#' class='btn-cncl' id='cancel' style='margin-top: 0px; border: none; padding: 0%; pointer-events: none;' data-sid=" + x[i].starttime + ">
+                                                            <i class='zmdi zmdi-close' style='color: #cccccc; font-size: 25px;'></i>
+                                                        </a>
+                                                    </td>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if i.tester_name == tester_email_id.name %}
+                                                    <td title="Delete" style="border: none; background: none; padding-right: 0%; min-width: max-content;">
+                                                        <a href="#" onclick="deletefunction(this,'{{i.tester}}','{{i.starttime}}','{{i.celery_task_id}}');" id="delete" style="margin-top: 0px; border: none; padding: 0%; cursor: pointer; box-shadow: none;"><i
+                                                                    class="zmdi zmdi-delete" style="color: red; font-size: 25px;"></i> </a>
+                                                    </td>
+                                                    <td title='Cancel' style='border: none; background: none; padding-right: 5px; min-width: max-content;'>
+                                                        <a href='#' class='btn-cncl' id='cancel' style='margin-top: 0px; border: none; padding: 0%; cursor: pointer;' data-sid=" + x[i].starttime + ">
+                                                            <i class='zmdi zmdi-close' style='color: red; font-size: 25px;'></i>
+                                                        </a>
+                                                    </td>
+                                                    {% else %}
+                                                    <td title="Delete" style="border: none; background: none; padding-right: 0%; min-width: max-content;">
+                                                        <a href="#" onclick="deletefunction(this,'{{i.tester}}','{{i.starttime}}','{{i.celery_task_id}}');" id="delete" style="margin-top: 0px; border: none; padding: 0%; cursor: pointer; box-shadow: none; pointer-events: none;"><i
+                                                                    class="zmdi zmdi-delete" style="color: #cccccc; font-size: 25px;"></i> </a>
+                                                    </td>
+                                                    <td title='Cancel' style='border: none; background: none; padding-right: 5px; min-width: max-content;'>
+                                                        <a href='#' class='btn-cncl' id='cancel' style='margin-top: 0px; border: none; padding: 0%; pointer-events: none;' data-sid=" + x[i].starttime + ">
+                                                            <i class='zmdi zmdi-close' style='color: #cccccc; font-size: 25px;'></i>
+                                                        </a>
+                                                    </td>
+                                                    {% endif %}
+                                                {% endif %} -->
+                                                <!-- <td title="Status" style="width: auto; ">{{i.status}}</td> -->
+                                                {% if i.status == 'Pending' %}
+                                                <td title="Status">
+                                                    <div class="progress" style="height: 15px;">
+                                                        <div class="progress-bar progress-bar-striped active"
+                                                            role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                                            aria-valuemax="100"
+                                                            style="width:0%; color: #000; height: 15px;">
+                                                            Pending
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {% elif i.status == 'Running' %}
+                                                <td title="Status">
+                                                    <div class="progress" style="height: 15px;">
+                                                        <div class="progress-bar progress-bar-striped active progress-bar-animated bg-success"
+                                                            role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                            aria-valuemax="100" style="width:40%; height: 15px;">
+                                                            Running
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {% elif i.status == 'Aborted' %}
+                                                <td title="Status">
+                                                    <div class="progress" style="height: 15px;">
+                                                        <div class="progress-bar progress-bar-striped active bg-danger progress-bar-animated"
+                                                            role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                                                            aria-valuemax="100" style="width:100%; height: 15px;">
+                                                            Aborted
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {% else %}
+                                                <td title="Status">
+                                                    <div class="progress" style="height: 15px;">
+                                                        <div class="progress-bar progress-bar-striped active bg-success progress-bar-animated"
+                                                            role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                                                            aria-valuemax="100" style="width:100%; height: 15px;">
+                                                            Completed
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {% endif %}
+                                                <!-- <td title="Results" style='padding-left: 0px; min-width: max-content; overflow: auto; white-space: no-wrap;'>
+                                                    {% if i.status != "Running" %}
+                                                    <a id='file' class='btn btn-primary btn-round' style='background-color: transparent; pointer-events: none;' href='#' data-sid='" + x[i].starttime + "' onclick='get_log(this);' disabled>
+                                                        <i>
+                                                            <img src='/static/resources/assets/images/terminal.png' alt='LOG file' width='25px' height='25px'>
+                                                        </i>
+                                                    </a>
+                                                    {% else %}
+                                                    <a id='file' class='btn btn-primary btn-round' style='background-color: transparent;' href='#' data-sid='" + x[i].starttime + "' onclick='get_log(this);' title="Runtime Logs">
+                                                        <i>
+                                                            <img src='/static/resources/assets/images/terminal.png' alt='LOG file' width='25px' height='25px'>
+                                                        </i>
+                                                    </a>
+                                                    {% endif %}
+                                                    <a title="Logs" id='file' class='btn btn-primary btn-round' style='background-color: transparent; color: blue;' href='http://" + location.host + ":2000/results/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + "/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + "_logs.txt'
+                                                        onclick='new_window(this); return false;'><i><img src='/static/resources/assets/images/log-file.png' alt='LOG file' width='25px' height='25px'></i></a>
+                                                    <a title="Pytest Logs" id='file' class='btn btn-primary btn-round' style='background-color: transparent; color: blue;' href='http://" + location.host + ":2000/results/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + "/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + ".txt'
+                                                        onclick='new_window(this); return false;'><i class='zmdi zmdi-file' style='font-size:25px'></i></a>
+                                                    <a title="Allure Results" id='file' class='btn btn-primary btn-round' style='background-color: transparent;' href='http://" + location.host + ":2000/results/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + "/" + "allure-report/" + "' onclick='new_window(this); return false;'><img src='/static/resources/assets/images/allure.png' alt='ALLURE' width='25px' height='25px'></i>
+                                                    </a>
+                                                    <a title="Html Report" id='file' class='btn btn-primary btn-round' style='background-color: transparent; padding-left: 20px; padding-right: 20px;' href='http://" + location.host + ":2000/results/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + "/" + x[i].tester_id + "_" + x[i].testbed + "_" + x[i].starttime + ".html'
+                                                        onclick='new_window(this); return false;'><img src='/static/resources/assets/images/files.png' width='30px' height='25px' style='margin: 0%; padding: 0%;'></i>
+                                                    </a>
+                                                </td> -->
+
+                                                <td title="Time" style="width: auto; ">{{i.starttime}}</td>
+                                                <!-- <td title="Firmware Image" style="width: auto; ">{{i.firmware_name}}</td> -->
+                                                <td title="Feature" style="width: auto;">{{ i.feature|field_to_label }}
+                                                </td>
+                                                <!-- <td title="Batch Size" style="width: auto;">{{i.batch_size}}</td> -->
+                                                <!-- <td title="Duration" style="width: auto;">{{i.duration}}</td> -->
+                                                <!-- <td title="Upload Rate" style="width: auto;">{{i.upload_rate}}</td> -->
+                                                <!-- <td title="Download Rate" style="width: auto;">{{i.download_rate}}</td> -->
+                                                <!-- <td title="Protocol" style="width: auto;">{{i.protocol}}</td> -->
+                                                <!-- <td title="Tester Name" style="width: auto;">{{i.tester_name}}</td> -->
+                                                <!-- <td title="Tester-ID" style="width: auto; ">{{i.tester_id}}</td> -->
+                                                <!-- <td title="Notes"><input onfocus='clearInterval(interval);' onfocusout='var interval = setInterval(function() {refresh()}, 1000); window.interval = interval;' type='text' id='{{i.starttime}}' value='{{i.remarks}}'><a href='#' class='add_remarks btn btn-primary btn-round'
+                                                        data-sid='{{i.starttime}} {{tester_email_id.name}}' style='color: white; background-color: #3c4b64;'> Add</a></td>
+                                                <td title="Noted By">{{i.evaluator}}</td> -->
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="card" style="background-color:black; box-shadow: 5px 5px 10px black; padding: 0px;">
+                        <h2
+                            style="color: white; font-family: sans-serif; background-color: rgb(60,75,100); height: 40px; margin-bottom: 0%; padding-top: 10px; font-size: 15px; font-weight: bold;">
+                            &nbsp; Runtime logs
+                        </h2>
+                        <div id="logs" style="color: white; overflow-y: scroll; max-height: 50vh;"
+                            onmouseout="document.getElementById('logs').scrollTo(0, document.getElementById('logs').scrollHeight);">
+                        </div>
+                    </div>
+
+                </div>
+                <!-- <div class="col-mg-auto" style="width: 1vw;">
+                </div> -->
+                <div class="outer col-sm advance_test" id="example1"
+                    style="padding: 0%; border-radius: 1rem 1rem 0 0;display:none;right:1%">
+                    <div class="header" id="head" style="border-radius: 1rem 1rem 0 0; padding: 0%;">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <h6 style="color: white; text-transform: capitalize; font-weight: bolder; width: auto;">
+                                    <b>Advance Testing </b>
+                                </h6>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Modal Header</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="ssid">SSID</label>
+                                        <input type="text" class="form-control" id="ssid_popup"
+                                            placeholder="Enter SSID">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password1">Password</label>
+                                        <input type="text" class="form-control" id="ssid_password"
+                                            placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="security">security</label>
+                                        <input type="text" class="form-control" id="ssid_security"
+                                            placeholder="Security">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="color">Color</label>
+                                        <input type="text" class="form-control" id="ssid_color" placeholder="Color">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="click" id="submit_popup" data-dismiss="modal"
+                                        class="btn btn-success">ADD</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="context-menu">
+                        <div class="item" data-name="lanforge">Create a Lanforge</div>
+                        <div class="item" data-name="dut">Create a dut</div>
+                        <div class="item" data-name="create_scenario">create scenario</div>
+                    </div>
+                    <div id="context-menu-inner">
+                        <div class="item" data-name="delete">delete</div>
+                    </div>
+                    <div class="col-mg-auto" id="main" style="position: relative;box-sizing: border-box;">
+                        <div class="col-sm-4" id="main"
+                            style="background-color: ablackqua;height: 80vh;width:100%;position: relative;padding-left: 0;padding-top:10px;">
+                        <div id="main_section"
+                            style="height: 100%;width:300%;top:0%;background-color:rgb(126, 189, 244);position: absolute;">
+                            <div id="context-menu">
+                                <div class="item" data-name="lanforge">Create a Lanforge</div>
+                                <div class="item" data-name="dut">Create a dut</div>
+                                <div class="item" data-name="create_scenario">create scenario</div>
+                            </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+        </div>
+    </section>
+    <!-- Scripts -->
+    <script src="{% static 'resources\assets\bundles\libscripts.bundle.js' %}"></script>
+    <script src="{% static 'resources\assets\bundles\vendorscripts.bundle.js' %}"></script>
+    <script src="{% static 'resources\assets\bundles\mainscripts.bundle.js' %}"></script>
+    <script src="{% static 'resources\assets\bundles\jvectormap.bundle.js' %}"></script>
+    {% include 'resources/ajaxfile.html' %}
+
+    <script type="text/javascript">
+        window.history.forward();
+
+        function noBack() {
+            window.history.forward();
+        }
+        function toggle_available(loc) {
+            if (document.getElementsByClassName('available')[0].style.display != 'none') {
+                document.getElementsByClassName('available')[0].style.animation = 'fadeout 0.5s linear forwards';
+                setTimeout(function () {
+                    document.getElementsByClassName('available')[0].style.display = 'none';
+                    document.getElementById('close').style.display = 'none';
+                    document.getElementById('mobile').style.display = 'block';
+                }, 500);
+                loc.title = "Show Available Devices"
+            } else {
+                document.getElementById('mobile').style.display = 'none';
+                document.getElementById('close').style.display = 'block';
+                document.getElementsByClassName('available')[0].style.animation = 'fadein 0.5s linear forwards';
+                document.getElementsByClassName('available')[0].style.display = 'block';
+                loc.title = "Hide Available Devices"
+            }
+        }
+        function toggle_manual(loc) {
+
+            if (document.getElementsByClassName('manual_test')[0].style.display != 'none') {
+                document.getElementsByClassName('manual_test')[0].style.animation = 'fadeout 0.5s linear forwards';
+                setTimeout(function () {
+                    document.getElementsByClassName('manual_test')[0].style.display = 'none';
+                    document.getElementById('close_manual').style.display = 'none';
+                    document.getElementById('select_manual').style.display = 'block';
+                }, 500);
+                loc.title = "Show Manual Testing";
+            } else {
+                document.getElementById('select_manual').style.display = 'none';
+                document.getElementById('close_manual').style.display = 'block';
+                document.getElementsByClassName('automation_test')[0].style.animation = 'fadeout 0.5s linear forwards';
+                setTimeout(function () {
+                    document.getElementsByClassName('automation_test')[0].style.display = 'none';
+                    document.getElementById('close_auto').style.display = 'none';
+                    document.getElementById('select_auto').style.display = 'block';
+                    document.getElementById('automation_test').title = 'Show Automation Testing'
+                }, 0);
+                document.getElementsByClassName('manual_test')[0].style.animation = 'fadein 0.5s linear forwards';
+                document.getElementsByClassName('manual_test')[0].style.display = 'block';
+                loc.title = "Hide Manual Testing"
+            }
+            document.getElementsByClassName('automation_test')[0].style.display = 'none';
+            document.getElementsByClassName('advance_test')[0].style.display = 'none';
+            document.getElementById('select_adv').style.display = 'block';
+            document.getElementById('close_adv').style.display = 'none';
+        }
+        function toggle_auto(loc) {
+            if (document.getElementsByClassName('advance_test')[0].style.display != 'none') {
+                document.getElementsByClassName('advance_test')[0].style.display = 'none';
+                document.getElementById('select_adv').style.display = 'block';
+                document.getElementById('close_adv').style.display = 'none';
+            }
+
+            if (document.getElementsByClassName('automation_test')[0].style.display != 'none') {
+                document.getElementsByClassName('automation_test')[0].style.animation = 'fadeout 0.5s linear forwards'
+                setTimeout(function () {
+                    document.getElementsByClassName('automation_test')[0].style.display = 'none';
+                    document.getElementsByClassName('advance_test')[0].style.display = 'none';
+                    document.getElementById('close_auto').style.display = 'none';
+                    document.getElementById('select_auto').style.display = 'block';
+                }, 500);
+                loc.title = "Show Automation Testing";
+            } else {
+                document.getElementById('select_auto').style.display = 'none';
+                document.getElementById('close_auto').style.display = 'block';
+                document.getElementsByClassName('manual_test')[0].style.animation = 'fadeout 0.5s linear forwards';
+                setTimeout(function () {
+                    document.getElementsByClassName('manual_test')[0].style.display = 'none';
+                    document.getElementById('close_manual').style.display = 'none';
+                    document.getElementById('select_manual').style.display = 'block';
+                    document.getElementById('manual_test').title = 'Show Manual Testing';
+                }, 0);
+                document.getElementsByClassName('automation_test')[0].style.animation = 'fadein 0.5s linear forwards';
+                document.getElementsByClassName('automation_test')[0].style.display = 'block';
+                loc.title = "Hide Automation Testing"
+            }
+            document.getElementsByClassName('manual_test')[0].style.display = 'none';
+            document.getElementsByClassName('advance_test')[0].style.display = 'none';
+
+        }
+
+        function toggle_advance(loc) {
+            if (document.getElementsByClassName('automation_test')[0].style.display != 'none') {
+                document.getElementsByClassName('automation_test')[0].style.display = 'none';
+                document.getElementById('close_auto').style.display = 'none';
+                document.getElementById('select_auto').style.display = 'block';
+            }
+
+            if (document.getElementsByClassName('advance_test')[0].style.display != 'none' && document.getElementsByClassName('automation_test')[0].style.display == 'none') {
+                document.getElementsByClassName('advance_test')[0].style.animation = 'fadeout 0.5s linear forwards'
+                setTimeout(function () {
+                    document.getElementsByClassName('advance_test')[0].style.display = 'none';
+                    document.getElementsByClassName('manual_test')[0].style.display = 'none';
+                    document.getElementById('close_adv').style.display = 'none';
+                    document.getElementById('select_adv').style.display = 'block';
+                }, 500);
+                loc.title = "Show Advance Testing";
+            } else {
+                document.getElementById('select_adv').style.display = 'none';
+                document.getElementById('close_adv').style.display = 'block';
+                document.getElementsByClassName('manual_test')[0].style.animation = 'fadeout 0.5s linear forwards';
+                setTimeout(function () {
+                    document.getElementsByClassName('manual_test')[0].style.display = 'none';
+                    document.getElementById('close_manual').style.display = 'none';
+                    document.getElementById('select_manual').style.display = 'block';
+                    document.getElementById('manual_test').title = 'Show Manual Testing';
+                }, 0);
+                document.getElementsByClassName('advance_test')[0].style.animation = 'fadein 0.5s linear forwards';
+                document.getElementsByClassName('advance_test')[0].style.display = 'block';
+                loc.title = "Hide Advance Testing"
+            }
+
+
+
+        }
+
+        function change_form(loc) {
+            form_elements = document.getElementsByClassName('auto_form');
+            for (i of form_elements) {
+                i.style.display = "none";
+            }
+            new_elements = document.getElementsByClassName(loc.value);
+            for (i of new_elements) {
+                i.style.display = "block";
+            }
+        }
+
+        function ssids_values() {
+            $('#ssid_twog').empty();
+            $('#ssid_fiveg').empty();
+            var option = new Option('2G SSID', '');
+            document.querySelector("#ssid_twog").appendChild(option);
+            var option = new Option('5G SSID', '');
+            document.querySelector("#ssid_fiveg").appendChild(option);
+            $('#ssid_twog').selectpicker('refresh');
+            $('#ssid_fiveg').selectpicker('refresh');
+            let device = document.getElementById("dut_model").value;
+            for (i in ssid_values[device]) {
+                if (ssid_values[device][i] != null) {
+                    if (i < 4) {
+                        let option = new Option(ssid_values[device][i], ssid_values[device][i]);
+                        document.querySelector("#ssid_twog").appendChild(option);
+                        $('#ssid_twog').selectpicker('refresh');
+                    } else {
+                        let option = new Option(ssid_values[device][i], ssid_values[device][i]);
+                        document.querySelector("#ssid_fiveg").appendChild(option);
+                        $('#ssid_fiveg').selectpicker('refresh');
+                    }
+                    let option = new Option(ssid_values[device][i], ssid_values[device][i]);
+                    document.querySelector("#ssid_test").appendChild(option);
+                    $('#ssid_test').selectpicker('refresh');
+                }
+            }
+        }
+    </script>
+
+
+
+    <script>
+        var globaljson = []
+        var globalobj
+        let phonedatset
+        //function to get the requested lanforge IP
+        function getRequestIp() {
+            let requestIp = document.getElementById("search_ip").value
+            if (!ValidateIPaddress(requestIp)) {
+                return null
+            }
+            return requestIp
+        }
+        //function to validate ip address
+        function ValidateIPaddress(ipaddress) {
+            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+                return (true)
+            }
+            alert("You have entered an invalid IP address!")
+            return (false)
+        }
+        //class for the lanforge object
+        class Lanforge {
+
+            constructor(ip) {
+                this.LANforgeIp = ip
+                this.devices = []
+            }
+            //function to get the no of connected phones
+            checkNoOfDevices(devicelist) {
+                return this.devices.length
+            }
+            //function to get the list of all connected phones
+            async getConnectedDevices() {
+                let URL = `http://${this.LANforgeIp}:8080/adb/`
+                self = this
+                self.devices = []
+                await $.ajax({
+                    headers: { "Accept": "application/json" },
+                    // "async": false,
+                    type: 'GET',
+                    url: URL,
+                    crossDomain: true,
+                    beforeSend: function (xhr) {
+                        xhr.withCredentials = true;
+                    },
+                    success: function (data, textStatus, request) {
+                        console.log(data)
+                        if (data["devices"].length == undefined) {
+                            let obj = {}
+
+                            obj[data["devices"]["name"]] = data["devices"]
+                            self.devices.push(obj)
+                        } else {
+                            data = data["devices"]
+                            for (let element of data) {
+                                self.devices.push(JSON.parse(JSON.stringify(element)))
+                            }
+                        }
+
+                    },
+                    timeout: 10000,
+                    error: function (e) {
+                        alert("Timeout")
+                        self.devices = []
+
+                    },
+                });
+                return self.devices
+            }
+        }
+
+        //function to change the verbose name of devices
+        async function changeVerboseName(serial, val) {
+            for (obj of globaljson) {
+                if (obj[Object.keys(obj)].name == serial) {
+                    obj[Object.keys(obj)].verbosename = val
+                    await updatephonejson(phonedatset, serial, val)
+                    break
+                }
+            }
+
+        }
+        function updateglobaljson() {
+            let allstoredkeys = [...Object.keys(phonedatset)]
+            for (key of globaljson) {
+                if (allstoredkeys.indexOf(Object.keys(key)[0]) >= 0) {
+                    key[Object.keys(key)[0]]["verbosename"] = phonedatset[Object.keys(key)[0]]
+                }
+            }
+        }
+        //function to display all available divices
+        function showDevices() {
+
+            document.getElementById("available_devices").innerHTML = ""
+            let newphone
+            let outerdiv
+            let innerspan
+            globaljson.forEach((value, index) => {
+
+                outerdiv = document.createElement('div')
+                newphone = document.createElement('button')
+                innerspan = document.createElement('span')
+                newphone.classList.add("btn-sm")
+                newphone.style.width = "100%"
+                if (value[Object.keys(value)].verbosename != undefined) {
+                    innerspan.innerText = value[Object.keys(value)].verbosename
+                }
+                else {
+                    innerspan.innerText = Object.keys(value)
+                }
+
+                newphone.value = Object.keys(value)
+                newphone.setAttribute('title', `Device: ${value[Object.keys(value)].device}
+Serial:${Object.keys(value)}
+Model: ${value[Object.keys(value)].model}
+Product: ${value[Object.keys(value)].product}
+Release: ${value[Object.keys(value)].release}
+User Name: ${value[Object.keys(value)]["user-name"]}`)
+                if (value[Object.keys(value)].phantom == true) {
+                    newphone.style.border = "2px solid red"
+                }
+                else {
+                    newphone.style.border = "2px solid green"
+                }
+                newphone.appendChild(innerspan)
+                outerdiv.appendChild(newphone)
+                document.getElementById("available_devices").appendChild(outerdiv)
+            })
+        }
+
+
+
+        function displayNonPhantom() {
+            let selectmenu = document.getElementById("non_phantom_devices")
+            selectmenu.innerHTML = ""
+            selectmenu.style.border = "1px solid black"
+            selectmenu.style.padding = "1rem"
+
+            globaljson.forEach((value, index) => {
+
+                if (!value[Object.keys(value)].phantom) {
+                    let outdiv = document.createElement("div")
+
+                    outdiv.classList.add("checkbox-rect")
+                    let label = document.createElement("label")
+                    label.setAttribute("for", Object.keys(value))
+
+                    let checkbox = document.createElement("input")
+                    checkbox.setAttribute("id", Object.keys(value))
+
+                    checkbox.value = JSON.stringify(value)
+                    checkbox.name = Object.keys(value)
+                    checkbox.setAttribute('type', "checkbox")
+                    if (value[Object.keys(value)].verbosename == "undefined")
+                        label.innerText = value[Object.keys(value)].name
+                    else
+                        label.innerText = value[Object.keys(value)].verbosename
+                    outdiv.appendChild(checkbox)
+                    outdiv.appendChild(label)
+
+                    selectmenu.appendChild(outdiv)
+                }
+            })
+        }
+
+
+        function updatephonejson(phonedatset, serial, val) {
+
+
+            phonedatset[serial] = val
+
+
+
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "{% url 'getphonedata' %}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(phonedatset)
+                ,
+                success: function (data) {
+                }
+            });
+        }
+        // async function wifiversions() {
+        //     let allports = await fetch(`http://${globalobj.LANforgeIp}:8080/ports/all`).then(response => response.json()).then(response => { return response })
+        //     console.log(allports)
+        //     let alllresource = await fetch(`http://${globalobj.LANforgeIp}:8080/resource/all`).then(response => response.json()).then(response => {
+        //         return response
+        //     })
+        //     console.log(alllresource)
+
+        // }
+
+        function getCheckedPhones() {
+            let selected = [];
+            $('#non_phantom_devices input:checked').each(function () {
+                selected.push($(this).attr('name'));
+            });
+            return [...selected]
+        }
+
+        function toggleWifi(state) {
+            let ip = globalobj.LANforgeIp
+            let sel = getCheckedPhones()
+            sel.forEach((serial) => {
+                let temp = serial.substring(serial.indexOf(".") + 1)
+                let s = temp.substring(temp.indexOf(".") + 1)
+                $.ajax({
+                    type: 'POST',
+                    url: `http://${ip}:8080/cli-form/adb`,
+                    crossDomain: true,
+                    data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell svc wifi ${state}`,
+                    beforeSend: function (xhr) {
+                        // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                    },
+                    success: function () {
+
+                    },
+                    error: function (e) {
+                        alert("Timeout")
+
+                    },
+                });
+            })
+        }
+        function connectToWifi() {
+            let ssid = document.getElementById("ssid").value
+            let password = document.getElementById("password").value
+
+            let encryption = document.getElementById("encryption").value
+
+
+            let sel = getCheckedPhones()
+
+
+            sel.forEach((serial) => {
+                let temp = serial.substring(serial.indexOf(".") + 1)
+                let s = temp.substring(temp.indexOf(".") + 1)
+                console.log(`shelf=1&resource=1&adb_id=${s}&adb_cmd=shell cmd -w wifi connect-network ${ssid} ${encryption} ${password}`)
+                $.ajax({
+                    type: 'POST',
+                    url: `http://${globalobj.LANforgeIp}:8080/cli-form/adb`,
+                    crossDomain: true,
+                    data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell cmd -w wifi connect-network ${ssid} ${encryption} ${password}`,
+                    beforeSend: function (xhr) {
+                        // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                    },
+                    success: function () {
+
+                    },
+                    error: function (e) {
+                        alert("Timeout")
+
+                    },
+                });
+            })
+        }
+
+        function stopApp() {
+            let sel = getCheckedPhones()
+            sel.forEach((serial) => {
+                let temp = serial.substring(serial.indexOf(".") + 1)
+                let s = temp.substring(temp.indexOf(".") + 1)
+                $.ajax({
+                    type: 'POST',
+                    url: `http://${globalobj.LANforgeIp}:8080/cli-form/adb`,
+                    crossDomain: true,
+                    data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell am force-stop com.candela.wecan`,
+                    beforeSend: function (xhr) {
+                        // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                    },
+                    success: function () {
+
+
+                    },
+                    error: function (e) {
+                        alert("Timeout")
+
+                    },
+                })
+            })
+        }
+
+        function getCheckedPhonesData() {
+            let selected = [];
+            $('#non_phantom_devices input:checked').each(function () {
+                selected.push($(this).attr('value'));
+            });
+            return [...selected]
+        }
+        function openApp() {
+            let ssid = document.getElementById("ssid").value
+            let password = document.getElementById("password").value
+            let encryption = document.getElementById("encryption").value
+            let sel = getCheckedPhones()
+            let seldata = getCheckedPhonesData()
+            console.log(seldata)
+            sel.forEach((serial, index) => {
+                let temp = serial.substring(serial.indexOf(".") + 1)
+                let s = temp.substring(temp.indexOf(".") + 1)
+
+                seldata.forEach((data, idx) => {
+                    obj = JSON.parse(data)
+                    console.log(Object.keys(obj)[0])
+
+
+                    if (Object.keys(obj)[0] == serial) {
+                        if (obj[Object.keys(obj)]["user-name"] != "") {
+                            let username = obj[Object.keys(obj)]["user-name"]
+                            console.log("username is" + username)
+
+
+                            $.ajax({
+                                type: 'POST',
+                                url: `http://${globalobj.LANforgeIp}:8080/cli-form/adb`,
+                                crossDomain: true,
+                                data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell am start -n com.candela.wecan/com.candela.wecan.StartupActivity --es auto_start 1 --es username ${username} --es serverip ${globalobj.LANforgeIp} --es ssid ${ssid} --es password ${password} --es encryption ${encryption}`,
+                                beforeSend: function (xhr) {
+                                    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                                },
+                                success: function () {
+
+                                },
+                                error: function (e) {
+                                },
+                            });
+                        }
+                        else {
+                            let username = `device_${s}`
+
+                            $.ajax({
+                                type: 'POST',
+                                url: `http://${globalobj.LANforgeIp}:8080/cli-form/add_adb`,
+                                crossDomain: true,
+                                data: `shelf=1&resource=1&adb_id=${s}&lf_username=${s}`,
+                                beforeSend: function (xhr) {
+                                    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                                },
+                                success: function () {
+                                    console.log("ye pehle ayega")
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: `http://${globalobj.LANforgeIp}:8080/cli-form/adb`,
+                                        crossDomain: true,
+                                        async: false,
+                                        data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell am start -n com.candela.wecan/com.candela.wecan.StartupActivity --es auto_start 1 --es username ${username} --es serverip ${ip} --es ssid ${ssid} --es password ${password} --es encryption ${encryption}`,
+                                        beforeSend: function (xhr) {
+                                            // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                                            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                                        },
+                                        success: function () {
+                                            console.log("ye badme ayega")
+
+                                        },
+                                        error: function (e) {
+                                        },
+                                    });
+
+                                },
+                                error: function (e) {
+                                    alert("Timeout")
+
+                                },
+                            });
+                        }
+                    }
+                })
+
+
+            })
+        }
+        $(document).ready(() => {
+
+            // JSON POST ADB Example
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                }
+                if (this.status != 200) {
+                    console.log(this.responseText);
+                }
+                console.log(xhttp.responseText);
+            };
+            xhttp.open("POST", "http://192.168.52.89:8080/cli-json/adb", true);
+            xhttp.send('{"shelf":1,"resource":1,"adb_id":"R9ZR907PNEV","key":"shell","adb_cmd":"shell cmd -w wifi status"}');
+
+            const elements = document.querySelectorAll("#connect");
+            elements.forEach(element => {
+                element.addEventListener("click", async () => {
+                    globalobj = new Lanforge(getRequestIp())
+                    await globalobj.getConnectedDevices()
+                    globaljson = JSON.parse(JSON.stringify(globalobj.devices))
+
+                    console.log("globaljson:" + JSON.stringify(globaljson))
+                    await fetch("/getphonedata/").then(data => data.json()).then((data) => {
+                        phonedatset = data
+                    })
+                    console.log("phonedataset:" + JSON.stringify(phonedatset))
+                    globaljson.forEach(async (value, index) => {
+                        await updatephonejson(phonedatset, Object.keys(value), value[Object.keys(value)].model)
+                    })
+                    updateglobaljson()
+                    showDevices()
+                    console.log(globaljson)
+                    displayNonPhantom()
+                    // wifiversions()
+                })
+            })
+            document.getElementById("enable_wifi").addEventListener("click", () => {
+                toggleWifi("enable")
+            })
+            document.getElementById("disable_wifi").addEventListener("click", () => {
+                toggleWifi("disable")
+            })
+            document.getElementById("start_app").addEventListener('click', () => {
+                openApp()
+            })
+            document.getElementById("stop_app").addEventListener('click', () => {
+                stopApp()
+            })
+            document.getElementById("connect_wifi").addEventListener("click", () => {
+
+                connectToWifi()
+
+            })
+
+        })
+
+        //listener to change the name of device
+        let tempinput
+        let previousname
+        $("#available_devices").on('click', 'span', function () {
+            previousname = this.innerText
+            var $input = $('<input type="text" style="text-align:center;width:100%" value="' + $(this).text().trim() + '" />');
+            tempinput = ""
+            $(this).replaceWith($input);
+            $input.select();
+            tempinput = this.innerText
+        }).on('blur', 'input', function () {
+            let allvalues = [...Object.values(phonedatset)]
+            let serial = this.parentNode.value
+
+            if ($(this).val() == "" || $(this).val() == serial || $(this).val() == previousname) {
+
+                $(this).replaceWith('<span>' + tempinput + '</span>');
+
+            } else if (allvalues.indexOf("" + $(this).val()) >= 0) {
+                alert("Device with same name already exist")
+            }
+            else {
+                $(this).replaceWith('<span>' + $(this).val() + '</span>');
+                (async () => {
+                    await changeVerboseName(serial, $(this).val())
+                    displayNonPhantom()
+                })()
+            }
+
+            console.log(globaljson)
+
+        });
+        // document.getElementById('#fabb').addEventListener('click',function(e){
+        //     console.log("in control")
+        //     document.getElementById('#boxx').classList.toggle('box-active');
+        // });
+        document.querySelector(".fab").addEventListener('click', function (e) {
+            console.log("askhfiwgasuy")
+            document.querySelector(".box").classList.toggle('box-active')
+        });
+        document.querySelector(".fab1").addEventListener('click', function (e) {
+            console.log("askhfiwgasuy")
+            document.querySelector(".box1").classList.toggle('box1-active')
+        });
+
+        const button = document.getElementsByClassName('.fab');
+        button.addEventListener('click', function (e) {
+            console.log("clicked control")
+        });
+
+
+        // ent.querySelector("#fabb").addEventListener('click',function(e){
+        //     console.log("askhfiwgasuy")
+        //     document.querySelector("#box").classList.toggle('box-active')
+        // });
+    </script>
+    <script>
+        // ------------
+        // JS for ADVANCE TESTING
+        const contextMenu = document.getElementById("context-menu");
+        const scope = document.querySelector("#main_section");
+        const contextMenuInner = document.getElementById("context-menu-inner")
+        let connections = {
+
+        }
+        const normalizePozition = (mouseX, mouseY) => {
+            //  compute what is the mouse position relative to the container element (scope)
+            let {
+                left: scopeOffsetX,
+                top: scopeOffsetY,
+            } = scope.getBoundingClientRect();
+
+            scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
+            scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY;
+
+            const scopeX = mouseX - scopeOffsetX;
+            const scopeY = mouseY - scopeOffsetY;
+
+            // ? check if the element will go out of bounds
+            const outOfBoundsOnX =
+                scopeX + contextMenu.clientWidth > scope.clientWidth;
+
+            const outOfBoundsOnY =
+                scopeY + contextMenu.clientHeight > scope.clientHeight;
+
+            let normalizedX = mouseX;
+            let normalizedY = mouseY;
+
+            // ? normalize on X
+            if (outOfBoundsOnX) {
+                normalizedX =
+                    scopeOffsetX + scope.clientWidth - contextMenu.clientWidth;
+            }
+
+            // ? normalize on Y
+            if (outOfBoundsOnY) {
+                normalizedY =
+                    scopeOffsetY + scope.clientHeight - contextMenu.clientHeight;
+            }
+
+            return { normalizedX, normalizedY };
+        };
+
+        scope.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+
+            if (event.target == scope) {
+
+                const { clientX: mouseX, clientY: mouseY } = event;
+
+                const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+                contextMenu.classList.remove("visible");
+
+                contextMenu.style.top = `${normalizedY}px`;
+                contextMenu.style.left = `${normalizedX}px`;
+
+                setTimeout(() => {
+                    contextMenu.classList.add("visible");
+                });
+            }
+            if (event.target.classList.contains("newLanforge")) {
+                const { clientX: mouseX, clientY: mouseY } = event;
+
+                const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+                contextMenuInner.classList.remove("visible");
+
+                contextMenuInner.style.top = `${normalizedY}px`;
+                contextMenuInner.style.left = `${normalizedX}px`;
+
+                setTimeout(() => {
+                    contextMenuInner.classList.add("visible");
+                });
+            }
+            if (event.target.classList.contains("newDut")) {
+                const { clientX: mouseX, clientY: mouseY } = event;
+
+                const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+                contextMenuInner.classList.remove("visible");
+
+                contextMenuInner.style.top = `${normalizedY}px`;
+                contextMenuInner.style.left = `${normalizedX}px`;
+
+                setTimeout(() => {
+                    contextMenuInner.classList.add("visible");
+                });
+            }
+
+        });
+
+
+        contextMenu.addEventListener("click", async (e) => {
+            // close the menu if user clicks one of the option
+            if (e.target.classList.contains("item")) {
+                contextMenu.classList.remove("visible");
+                if (e.target.dataset.name == "lanforge") {
+                    let newLanforge = document.createElement("span");
+                    newLanforge.classList.add("newLanforge")
+
+                    let lanforgeIpContainer = document.createElement("div")
+                    lanforgeIpContainer.style = ` display:flex;justify-content:center; `
+                    let lanforgeIpInput = document.createElement("input")
+                    lanforgeIpInput.classList.add("form-control")
+                    lanforgeIpInput.placeholder = "Enter LanforgeIp"
+                    lanforgeIpContainer.appendChild(lanforgeIpInput)
+                    newLanforge.appendChild(lanforgeIpContainer)
+
+                    let deviceContainer = document.createElement("div")
+                    deviceContainer.style = `display:flex;flex-wrap:wrap;justify-content:space-between;margin:1rem;height:auto;row-gap:5px;column-gap:5px`
+                    newLanforge.appendChild(deviceContainer)
+
+                    document.getElementById("main_section").appendChild(newLanforge)
+
+                    newLanforge.style = `position:absolute;top:${e.clientY - 100}px;left:${e.clientX - 100}px;z-index:500;width:200px;height:200px;border:6px double black;background-color:white;`
+                    $(".newLanforge").draggable({
+                        containment: scope,
+                        scroll: false
+                    }).resizable({
+                        animate: true,
+                        containment: scope,
+                        ghost: true
+                    })
+                    lanforgeIpInput.addEventListener("blur", (event) => {
+
+                        fetchingAllDevices(lanforgeIpInput.value, deviceContainer)
+                    })
+                }
+                else if (e.target.dataset.name == "dut") {
+                    let newDut = document.createElement("span");
+                    newDut.classList.add("newDut")
+                    document.getElementById("main_section").appendChild(newDut)
+                    newDut.style = `position:absolute;top:${e.clientY - 400}px;left:${e.clientX - 100}px;z-index:500;width:500px;height:500px;border:5px double black;background-color:cyan;`
+
+                    let addbtn = document.createElement("button")
+                    addbtn.innerText = "+"
+                    addbtn.setAttribute("data-target", "#myModal")
+                    addbtn.setAttribute("data-toggle", "modal")
+                    newDut.appendChild(addbtn)
+                    let ssidcontainer = document.createElement("div")
+                    ssidcontainer.style = `height:auto;width:100%;style:flex;flex-direction:coloumn;`
+                    newDut.appendChild(ssidcontainer)
+
+
+                    // let ssid = prompt("enter ssid")
+                    // let pass = prompt("enter password")
+                    // let sec = prompt("enter security")
+                    document.getElementById("submit_popup").addEventListener("click", (ev) => {
+                        console.log("add clicked")
+                        console.log(document.getElementsByClassName("modal-footer"))
+
+                        ev.preventDefault()
+                        let ssid = document.getElementById("ssid_popup").value
+                        let pass = document.getElementById("ssid_password").value
+
+                        let sec = document.getElementById("ssid_security").value
+                        let color = document.getElementById("ssid_color").value
+                        connections[ssid] = {
+                            password: pass,
+                            security: sec,
+                            phones: []
+                        }
+
+
+                        let newssiddiv = document.createElement("div")
+                        newssiddiv.innerText = ssid
+                        newssiddiv.style = `width:100%;min-height:50px;text-align:center;max-height:100px;color:${color};position:relative;margin-bottom:20px;border:1px solid ${color};`
+
+                        ssidcontainer.appendChild(newssiddiv)
+
+
+                        // $(newssiddiv).droppable({
+                        //     accept: ".phone,.device",
+                        //     tolerance: 'fit',
+                        //     drop: function (event, ui) {
+                        //         let classs = ui.draggable.attr("class")
+                        //         if(classs.indexOf("phone")>=0){
+
+
+                        //         var newDiv = $(ui.helper).clone()
+
+                        //         var $newPosX = ui.offset.left - $(this).offset().left;
+                        //         var $newPosY = ui.offset.top - $(this).offset().top;
+                        //         newDiv.css({ left: $newPosX, top: $newPosY, backgroundColor: color, border: "1px solid white" })
+
+                        //         if(connections[ssid].phones.indexOf(ui.draggable.attr("data-serial"))<0){
+                        //             connections[ssid].phones.push(ui.draggable.attr("data-serial"))
+
+                        //         }
+                        //         ui.draggable.draggable({disabled: true});                           
+                        //          $(this).append(newDiv);
+                        //         newDiv.removeClass("phone")
+                        //         newDiv.addClass("device")
+                        //         $(newDiv).draggable({
+                        //             containment: newDut,
+                        //             scroll: false,
+                        //             revert: "invalid",
+                        //         })
+
+
+                        //     }else{
+                        //         if(classs.indexOf("device")>=0){
+                        //             ui.draggable.css({
+                        //                 left:ui.offset.left-$(this).offset().left,
+                        //                 top:ui.offset.top-$(this).offset().top,
+                        //                 backgroundColor: color, border: "1px solid white"
+                        //             })
+                        //             console.log(ssid)
+                        //             console.log(connections[ssid].phones.indexOf(ui.draggable.attr("data-serial")))
+                        //             if(connections[ssid].phones.indexOf(ui.draggable.attr("data-serial"))<0){
+                        //                 connections[ssid].phones.push(ui.draggable.attr("data-serial"))
+
+                        //         }
+                        //             $(this).append(ui.draggable)
+                        //         }
+                        //     }
+                        //     console.log(connections)
+                        // },
+                        // out:function(event,ui){
+                        //     connections[ssid].phones.splice(connections[ssid].phones.indexOf(ui.draggable.attr("data-serial")),1)
+                        // }
+                        // })
+
+                        $(newssiddiv).droppable({
+                            accept: ".phone",
+                            tolerance: "fit",
+                            drop: function (event, ui) {
+                                let serial = ui.draggable.attr("data-serial")
+                                console.log(serial);
+
+                                connectWifi(serial, ssid, pass, sec)
+                                console.log("connected")
+                                for (ssids in connections) {
+                                    if (connections[ssids].phones.indexOf(serial) >= 0) {
+                                        connections[ssids].phones.splice(connections[ssids].phones.indexOf(serial), 1)
+                                    }
+                                }
+                                connections[ssid].phones.push(serial)
+                                ui.draggable.css({ backgroundColor: color })
+
+                            }
+                        })
+                    })
+
+
+
+
+                    $(".newDut").draggable({
+                        containment: scope,
+                        scroll: false
+                    }).resizable({
+                        animate: true,
+                        containment: scope,
+                        ghost: true
+                    })
+                }
+                // else if(e.target.dataset.name=="create_scenario"){
+                //    for(let ssids in connections){
+                //     console.log(ssids)
+                //     console.log(ssids["phones"])
+
+                //     connections[ssids].phones.forEach((val,idx)=>{
+                //         let temp = val.substring(val.indexOf(".") + 1)
+                //     let s = temp.substring(temp.indexOf(".") + 1)
+                //         $.ajax({
+                //         type: 'POST',
+                //         url: `http://192.168.200.84:8080/cli-form/adb`,
+                //         crossDomain: true,
+                //         data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell cmd -w wifi connect-network ${ssids} ${connections[ssids].security} ${connections[ssids].password}`,
+                //         beforeSend: function (xhr) {
+                //             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                //             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                //         },
+                //         success: function () {
+
+                //         },
+                //         error: function (e) {
+                //             alert("Timeout")
+
+                //         },
+                //     });
+                //     })
+                //    }
+                // }
+            }
+        })
+
+        async function connectWifi(serial, ssid, password, security) {
+            let temp = serial.substring(serial.indexOf(".") + 1)
+            let s = temp.substring(temp.indexOf(".") + 1)
+            await $.ajax({
+                type: 'POST',
+                url: `http://192.168.200.84:8080/cli-form/adb`,
+                crossDomain: true,
+                data: `shelf=1&resource=1&adb_id=${s}&adb_cmd=shell cmd -w wifi connect-network ${ssid} ${security} ${password}`,
+                beforeSend: function (xhr) {
+                    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+                },
+                success: function () {
+
+                },
+                error: function (e) {
+                    alert("Timeout")
+
+                },
+            });
+        }
+        contextMenuInner.addEventListener("click", (e) => {
+            // close the menu if user clicks one of the option
+            if (e.target.classList.contains("item")) {
+                contextMenuInner.classList.remove("visible");
+
+                if (e.target.dataset.name == "delete") {
+                    console.log(e.target.offsetParent)
+                    console.log()
+                }
+            }
+        })
+
+        scope.addEventListener("click", (e) => {
+            // ? close the menu if the user clicks outside of it
+            if (e.target.offsetParent != contextMenu) {
+                contextMenu.classList.remove("visible");
+            }
+            if (e.target.offsetParent != contextMenuInner) {
+                contextMenuInner.classList.remove("visible");
+            }
+        });
+        async function fetchingAllDevices(ip, deviceContainer) {
+            console.log("fetching")
+            // deviceContainer.innerHtml=""
+            deviceContainer.innerHTML = ""
+
+            await fetch(`http://${ip}:8080/adb/`).then(data => data.json()).then((response) => {
+                if (response.devices.length == undefined) {
+                    let serialkey = response.devices.name
+                    response.devices = [{
+                        [serialkey]: response.devices
+                    }]
+                }
+
+                response["devices"].forEach(element => {
+
+                    let device = document.createElement("span")
+                    device.style = `height:1rem;width:1rem;border:1px solid black;background-color:white;z-index:10000`
+                    device.setAttribute("value", JSON.stringify(element[Object.keys(element)]))
+                    device.setAttribute("data-serial", Object.keys(element))
+                    device.classList.add("phone")
+                    deviceContainer.appendChild(device)
+                    $(".phone").draggable({
+
+                        clone: true,
+                        helper: "clone",
+
+                    })
+                });
+            })
+        }
+    </script>
+</body>
